@@ -7,7 +7,9 @@ import Card from "../ui/Card";
 import "./Expenses.css";
 
 const Expenses = (props) => {
-  const [yearFilter, setYearFilter] = useState();
+  const [yearFilter, setYearFilter] = useState(
+    new Date(Date.now()).getFullYear()
+  );
 
   const selectYearFilter = (year) => {
     setYearFilter(year);
@@ -19,16 +21,22 @@ const Expenses = (props) => {
         selectedYear={yearFilter}
         onSelectYearFilter={selectYearFilter}
       />
-      {props.expenses.map((expense) => {
-        return (
-          <ExpenseItem
-            key={expense.id}
-            title={expense.title}
-            date={expense.date}
-            amount={expense.amount}
-          />
-        );
-      })}
+      {props.expenses
+        .filter(
+          (expense) =>
+            yearFilter === "" ||
+            expense.date.getFullYear() === Number(yearFilter)
+        )
+        .map((expense) => {
+          return (
+            <ExpenseItem
+              key={expense.id}
+              title={expense.title}
+              date={expense.date}
+              amount={expense.amount}
+            />
+          );
+        })}
     </Card>
   );
 };
